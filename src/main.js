@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from 'router/index.js'
 
 Vue.config.productionTip = false
+// 通过原形设置总线
 Vue.prototype.$bus = new Vue()
 
 new Vue({

@@ -1,11 +1,10 @@
 <template>
-  <div class='shopcart'>shopcart
-  </div>
+  <div class='detail-swiper'></div>
 </template>
 
 <script>
 export default {
-  name: 'Shopcart',
+  name: 'DetailSwiper',
 }
 </script>
 <style scoped>

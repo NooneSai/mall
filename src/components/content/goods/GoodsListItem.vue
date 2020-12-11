@@ -1,15 +1,16 @@
 <template>
-  <div class='goods-list-item'>
-    <a :href="goodsItem.link">
-      <img :src="goodsItem.show.img"
-           @load="imgLoad"
-           alt="">
-      <div class="goods-info">
-        <p>{{goodsItem.title}}</p>
-        <span class="price">{{goodsItem.price}}</span>
-        <span class="collect">{{goodsItem.cfav}}</span>
-      </div>
-    </a>
+  <div class='goods-list-item'
+       @click="itemClick">
+
+    <img :src="goodsItem.show.img"
+         @load="imgLoad"
+         alt="">
+    <div class="goods-info">
+      <p>{{goodsItem.title}}</p>
+      <span class="price">{{goodsItem.price}}</span>
+      <span class="collect">{{goodsItem.cfav}}</span>
+    </div>
+
   </div>
 </template>
 
@@ -26,7 +27,12 @@ export default {
   },
   methods: {
     imgLoad() {
+      // 从子组件将方法传出给爷爷级别或大于爷爷级别的，可以通过vuex或者原形的总线
       this.$bus.$emit('itemImgLoad')
+    },
+    itemClick() {
+      // 设置路由地址
+      this.$router.push('/detail/' + this.goodsItem.iid)
     },
   },
 }

@@ -128,13 +128,13 @@ export default {
     // 2：在手指滚动的过程中侦测，惯性是不侦测的
     // 3：只要在滚动都会侦测
     this.scroll = new BScroll(this.$refs.aaaa, {
-      probeType: 3,
+      probeType: 1,
       click: true,
       //上拉加载更多
       pullUpLoad: true,
     })
     this.scroll.on('scroll', (position) => {
-      // console.log(position)
+      console.log(position)
     })
     // 只能做一次
     this.scroll.on('pullingUp', () => {

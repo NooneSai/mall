@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import BScroll from 'better-scroll'
+import BScorll from 'better-scroll'
 export default {
   name: 'BetterScroll',
   data() {
@@ -17,43 +17,36 @@ export default {
     }
   },
   props: {
-    probeType: {
-      type: Number,
-      default: 0,
-    },
-    pullUpLoad: {
-      type: Boolean,
-      default: false,
-    },
+    probeType: 0,
+    pullUpLoad: false,
   },
-  // mounted 组件创建完成后，可以访问DOM元素
+  //挂载完成后，可以访问DOM元素
   mounted() {
-    // 创建scroll实例对象
-    this.scroll = new BScroll(this.$refs.wrapper, {
-      // 让滚动里面的内容可以进行点击
+    // 因为BScroll需要用DOM，所以要放在mounted里
+    this.scroll = new BScorll(this.$refs.wrapper, {
       click: true,
-      // 触发scroll事件
       probeType: this.probeType,
-      //要将pullUpLoad设置为真 才可以开启上拉加载
+      // pullUpLoad设置为true时，才会启动上拉加载更多，并且设置probeType为3
       pullUpLoad: this.pullUpLoad,
     })
-    // 监听滚动事件
+    //监听滚动
     this.scroll.on('scroll', (position) => {
       this.$emit('scroll', position)
     })
-    // 监听加载更多
+    // 监听上拉加载
     this.scroll.on('pullingUp', () => {
       this.$emit('pullingUp')
     })
   },
   methods: {
-    moveTo(x, y, time = 300) {
+    scrollTo(x, y, time = 300) {
       this.scroll && this.scroll.scrollTo(x, y, time)
     },
     finishPullUp() {
       this.scroll && this.scroll.finishPullUp()
     },
     refresh() {
+      console.log('---')
       this.scroll && this.scroll.refresh()
     },
   },
