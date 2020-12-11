@@ -3,7 +3,7 @@
     <nav-bar class="home-nav-bar">
       <div slot="center">购物车</div>
     </nav-bar>
-       <tab-control ref="tabControl1"
+    <tab-control ref="tabControl1"
                  class="tab-control"
                  :titles="['流行','新款','精选']"
                  @tabClick="homeTabClick"
@@ -17,13 +17,14 @@
                    :pullUpLoad='true'>
       <!-- 将数据传送到子组件，并判断banners是否为空，如果为空就不加载 -->
       <home-swiper :cbanners="banners"
-                   v-if="banners" @swiperImgLoad='swiperImgLoad'></home-swiper>
+                   v-if="banners"
+                   @swiperImgLoad='swiperImgLoad'></home-swiper>
       <home-recommend :crecommends="recommends"></home-recommend>
       <home-feature-view></home-feature-view>
       <tab-control ref="tabControl2"
                    :titles="['流行','新款','精选']"
                    @tabClick="homeTabClick"
-                   :class="{fixed:isTabFixed}" ></tab-control>
+                   :class="{fixed:isTabFixed}"></tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </better-scroll>
 
@@ -77,7 +78,6 @@ export default {
     }
   },
   methods: {
-
     // 点击事件的方法
     homeTabClick(index) {
       switch (index) {
@@ -91,11 +91,13 @@ export default {
           this.currentType = 'sell'
           break
       }
+      this.$refs.tabControl1.currentIndex = index
+      this.$refs.tabControl2.currentIndex = index
     },
     // 获取位置，并当y轴大于-1000时，显示回到顶部的图片
     contentScroll(position) {
       this.isBackTopShow = -position.y > 1000
-      this.isTabFixed=-position.y>this.tabOffsetTop
+      this.isTabFixed = -position.y > this.tabOffsetTop
     },
     // 点击回到顶部的图片，跳回到顶部
     backTopCLick() {
@@ -105,11 +107,10 @@ export default {
     loadMore() {
       this.getGoodsData(this.currentType)
     },
-//
-swiperImgLoad(){
-      this.tabOffsetTop=this.$refs.tabControl2.$el.offsetTop;
-
-},
+    //
+    swiperImgLoad() {
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop
+    },
     // 获取数据的方法
     getMultiData() {
       getHomeMultiData().then((res) => {
@@ -143,14 +144,26 @@ swiperImgLoad(){
       //  this.$refs.content.refresh()
       refresh()
     })
-      
-  
-    
+  },
+  //当前路由活跃
+  activated() {
+    // 回到时刷新一下
+    this.$refs.content.refresh()
+    this.$refs.content.scrollTo(0, this.saveY, 0)
+  },
+  // 当前路由不活跃
+  deactivated() {
+    // 离开时保存saveY的值
+    this.saveY = this.$refs.content.getScrollY()
+    // console.log(this.saveY)
   },
   computed: {
     showGoods() {
       return this.goods[this.currentType].list
     },
+  },
+  destroyed() {
+    console.log('home destroyed')
   },
 }
 </script>
@@ -179,7 +192,7 @@ swiperImgLoad(){
   height: calc(100% - 93px);
   overflow: hidden;
 }
-.fixed{
+.fixed {
   position: fixed;
   left: 0;
   right: 0;
