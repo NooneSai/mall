@@ -2,7 +2,7 @@
   <div class='goods-list-item'
        @click="itemClick">
 
-    <img :src="goodsItem.show.img"
+    <img :src="showImage"
          @load="imgLoad"
          alt="">
     <div class="goods-info">
@@ -25,14 +25,30 @@ export default {
       },
     },
   },
+  computed: {
+    showImage() {
+      return this.goodsItem.image || this.goodsItem.show.img
+    },
+  },
+
   methods: {
     imgLoad() {
-      // 从子组件将方法传出给爷爷级别或大于爷爷级别的，可以通过vuex或者原形的总线
       this.$bus.$emit('itemImgLoad')
+      // if (this.$route.path.indexOf('/home')) {
+      //   // 从子组件将方法传出给爷爷级别或大于爷爷级别的，可以通过vuex或者原形的总线
+      //   this.$bus.$emit('itemImgLoad')
+      // } else if (this.$route.path.indexOf('/detail')) {
+      //   this.$bus.$emit('detailItemImageLoad')
+      // }
     },
     itemClick() {
       // 设置路由地址
-      this.$router.push('/detail/' + this.goodsItem.iid)
+      if (this.$route.path.indexOf('home') !== -1) {
+        // console.log('11')
+        this.$router.push('/detail/' + this.goodsItem.iid)
+      } else {
+        return false
+      }
     },
   },
 }

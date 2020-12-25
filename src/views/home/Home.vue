@@ -41,12 +41,13 @@ import GoodsList from 'components/content/goods/GoodsList.vue'
 
 import { getHomeMultiData, getHomeGoodsData } from 'network/home.js'
 import { debounce } from 'common/utils.js'
+import { itemListenerMixin } from 'common/mixin.js'
 
 import HomeSwiper from './childcomps/HomeSwiper.vue'
 import HomeRecommend from './childcomps/HomeRecommend.vue'
 import HomeFeatureView from './childcomps/HomeFeatureView.vue'
-import BetterScroll from '../../components/common/betterscroll/BetterScroll.vue'
-import BackTop from '../../components/content/backtop/BackTop.vue'
+import BetterScroll from 'components/common/betterscroll/BetterScroll.vue'
+import BackTop from 'components/content/backtop/BackTop.vue'
 
 export default {
   name: 'Home',
@@ -61,6 +62,7 @@ export default {
     BetterScroll,
     BackTop,
   },
+  mixins: [itemListenerMixin],
   data() {
     return {
       banners: null,
@@ -96,6 +98,7 @@ export default {
     },
     // 获取位置，并当y轴大于-1000时，显示回到顶部的图片
     contentScroll(position) {
+      // console.log(position)
       this.isBackTopShow = -position.y > 1000
       this.isTabFixed = -position.y > this.tabOffsetTop
     },
@@ -137,14 +140,7 @@ export default {
     this.getGoodsData('sell')
   },
   //挂载完成，可以访问DOM元素，this.$refs是DOM元素
-  mounted() {
-    const refresh = debounce(this.$refs.content.refresh, 30)
-    this.$bus.$on('itemImgLoad', () => {
-      //这里每加载一张图片就刷新一次，可以设置防抖程序，让它短时间内只要有图片进来就先不刷新，直到超过该设定事件后开始刷新
-      //  this.$refs.content.refresh()
-      refresh()
-    })
-  },
+  mounted() {},
   //当前路由活跃
   activated() {
     // 回到时刷新一下
@@ -156,6 +152,9 @@ export default {
     // 离开时保存saveY的值
     this.saveY = this.$refs.content.getScrollY()
     // console.log(this.saveY)
+    // 离开时取消全局事件的监听
+    this.$bus.$off('itemImgLoad', this.homeItemListener)
+    // console.log('home leave')
   },
   computed: {
     showGoods() {
@@ -163,7 +162,7 @@ export default {
     },
   },
   destroyed() {
-    console.log('home destroyed')
+    // console.log('home destroyed')
   },
 }
 </script>

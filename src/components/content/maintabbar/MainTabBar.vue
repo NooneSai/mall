@@ -55,6 +55,6 @@ export default {
 <style scoped>
 .main-tab-bar {
   background-color: #fff;
-  z-index: 5;
+  /* z-index: 5; */
 }
 </style>

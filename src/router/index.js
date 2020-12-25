@@ -45,10 +45,10 @@ const routes = [
     component: Profile
   },
   {
-    // 设置动态路由
+    //设置动态路由 :
     path: '/detail/:iid',
     component: Detail
-  },
+  }
 ]
 const router = new VueRouter({
   routes,
